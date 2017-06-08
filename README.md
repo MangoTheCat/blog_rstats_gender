@@ -1,13 +1,6 @@
----
-title: 'The faces of #rstats: a (brief) exploration of gender in the R community'
-author: "Adnan Fiaz"
-output: 
-  html_document:
-    keep_md: true
----
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE, message = FALSE)
-```
+# The faces of #rstats: a (brief) exploration of gender in the R community
+Adnan Fiaz  
+
 
 The representation of women in technology is gaining more and more focus. In the R community this has lead to the foundation of R Ladies, the awarding of a grant by the R Foundation to them and the offering of a scholarship by the useR conference (the latter two are also about inclusion of other minorities). This is a good thing but it does make me wonder: how do we measure success? how will we know these actions have lead to a better situation? And by how much?
 
@@ -15,7 +8,8 @@ This blogpost by Maelle Salmon and this one by Colin Fay inspired me to explore 
 
 So I set out to measure the proportion of women among the faces of #rstats. I used Colin's code to first retrieve the profile pictures. 
 
-```{r, eval=FALSE, message=FALSE}
+
+```r
 # Taken from http://colinfay.me/playing-with-rstats-and-microsoft-computer-vision-api/
 library(dplyr)
 library(rtweet)
@@ -29,7 +23,8 @@ users <- search_users(q= '#rstats', n = 1000, parse = TRUE) %>%
 
 Then I used the Microsoft Face API to tell me if the picture was of a man or a woman. Colin used `lapply` but I thought I'd give `purrr::map` a try.
 
-```{r, eval=FALSE}
+
+```r
 library(httr)
 library(purrr)
 getGender <- function(myURLs){
@@ -56,34 +51,11 @@ usersWithGender <- users %>%
   mutate(gender= getGender(profile_image_url)) %>% 
   select(user_id, gender)
 ```
-```{r, include=FALSE}
-library(readr)
-usersWithGender <- read_csv("data/usersWG.csv") 
-```
 
-From Maelle's great collage we already knew not all profile pictures are of people and the Face API does not return any predictions in these cases. There are also some instances the Face API wrongfully didnt detect a face (not even one of our EARL keynote speaker, sorry Hillary Parker). Altogether the Face API detected  `r sum(!is.na(usersWithGender$gender))` faces and the proportion of women among the #rstat faces is `r sprintf("%.01f%%" ,sum(usersWithGender$gender=="female", na.rm=TRUE)/sum(!is.na(usersWithGender$gender))*100)` (click [here](https://s-media-cache-ak0.pinimg.com/736x/57/6d/fe/576dfe57df89ef97cd31fd7601651bc2.jpg) for the pie chart). This is only an estimate and it might not even be a very accurate one but we can compare it with other estimates:
 
-```{r, echo=FALSE}
-NL <- 0.2 # source: CBS / Arbeidsvolume naar bedrijfstak en geslacht / 62-63 IT- en informatiedienstverlening
-StackOverflow <- 0.076 # Developer Survey Results 2017 (https://insights.stackoverflow.com/survey/2017#demographics)
-GoogleTech <- 0.19 # Google Diversity 2015 (http://www.google.com/diversity/)
-#rstat_faces <- sum(usersWithGender$gender=="female", na.rm=TRUE)/sum(!is.na(usersWithGender$gender))
-rstat_faces <- 0.20
+From Maelle's great collage we already knew not all profile pictures are of people and the Face API does not return any predictions in these cases. There are also some instances the Face API wrongfully didnt detect a face (not even one of our EARL keynote speaker, sorry Hillary Parker). Altogether the Face API detected  314 faces and the proportion of women among the #rstat faces is 20.4% (click [here](https://s-media-cache-ak0.pinimg.com/736x/57/6d/fe/576dfe57df89ef97cd31fd7601651bc2.jpg) for the pie chart). This is only an estimate and it might not even be a very accurate one but we can compare it with other estimates:
 
-library(ggplot2)
-plotData <- data.frame(Var=c("NL", "StackOverflow", "Google Tech", "rstats faces"), 
-                       Value=c(NL, StackOverflow, GoogleTech, rstat_faces))
-ggplot(plotData, aes(x=Var, y=Value)) +
-  geom_segment(aes(x = Var, xend = Var,
-                     y = 0, yend = Value), 
-                 size = 1.1, alpha = 0.6) +
-  geom_point(size=5) +
-  scale_y_continuous(limits = c(0, 1), labels = scales::percent) + 
-  labs(title="Percentage of Women in Tech from Various Sources", y="Percentage", x="Source") +
-  coord_flip() +
-  theme_bw() +
-  theme(panel.border = element_rect(fill=NA, colour="white"), axis.ticks = element_blank())
-```
+![](rstats_faces_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 Although the percentage of women in technology at Google and in the Netherlands are based on an entirely different populations our estimate is close to these two. It is fair to assume, without any further knowledge, that the percentage of women in the #rstats community will be similar to the percentage of women in the wider tech community. Nevertheless there are other issues with the general estimates. The industry categorisation of the Netherlands means that we're not capturing all tech jobs (for example, those in finance aren't included). Also there has been quite the controversy on Google's gender gap which may mean that estimate is too low as well. And finally in the discussion on the results of the StackOverflow Developer Survey it is stated their estimate is probably too low. 
 
@@ -95,7 +67,8 @@ Our approach so far has been to use profile pictures, determine the gender and t
 
 First, we have to do some webscraping to retrieve the profile pictures. This is relatively easy with the **rvest** package. Below is the code for EARL London 2016.
 
-```{r, eval=FALSE}
+
+```r
 library(rvest)
 earl2016URL<- "https://earlconf.com/2016/london/speakers"
 # We used the SelectorGadget to determine the name of the xml node containing the image tage
@@ -108,7 +81,8 @@ earl2016Genders <- getGender(paste0(earl2016URL, speakers))
 
 For the EARL conferences of 2017 the above code doesn't work because the website was updated. Unfortunately for our sys admin I know where he lives and he helped me figure out how to get the image URL's for all the speakers. It involved some wrangling with json but luckily we have the **jsonlite** and **purrr** packages for that.
 
-```{r, eval=FALSE}
+
+```r
 library(jsonlite)
 earlLondon2017 <- read_json("https://earlconf.com/london/londonSpeakers.json")
 earlLondon2017Genders <- earlLondon2017 %>% 
@@ -125,7 +99,8 @@ earlSF2017Genders <- earlSF2017 %>%
 
 I wasn't able to find profile pictures of the speakers for useR 2017 but for useR 2016 I was able to use almost the same code as above.  
 
-```{r, eval=FALSE}
+
+```r
 user2016URL <- "http://schedule.user2016.org/directory/speakers"
 user2016Genders <- read_html(user2016URL) %>% 
   html_nodes("img") %>% 
@@ -136,28 +111,7 @@ user2016Genders <- read_html(user2016URL) %>%
 
 Finally, armed with the web scraping results we can plot the gender distribution for different conferences.
 
-```{r, echo=FALSE}
-conferences <- c("#rstats faces", "EARL London 2016", "UseR 2016", 
-                                "EARL SF 2017", "EARL London 2017")
-conferences <- factor(conferences, levels=conferences)
-plotData <- data.frame(Type = conferences, 
-                       PercentageWomen= c(0.20, 5/43, 20/84, 10/30, 11/34)) 
-
-library(ggplot2)
-#ggplot(myData , aes(x=Type, y=PercentageWomen)) + geom_bar(stat="identity") + ylim(c(0,1))
-
-ggplot(plotData, aes(x=Type, y=PercentageWomen)) +
-  geom_segment(aes(x = Type, xend = Type,
-                     y = 0, yend = PercentageWomen), 
-                 size = 1.1, alpha = 0.6) +
-  geom_point(size=5) +
-  scale_y_continuous(limits = c(0, 1), labels = scales::percent) + 
-  labs(title="Percentage of Women amongst speakers at EARL conferences", y="Percentage", x="Conference") +
-  coord_flip() +
-  theme_bw() +
-  theme(panel.border = element_rect(fill=NA, colour="white"), axis.ticks = element_blank())
-
-```
+![](rstats_faces_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 Compared to 2016  the percentage of women speakers at EARL has gone up. This reflects the effort that has been put in by the EARL team and will hopefully continue to improve in the future. The estimate for useR 2016 is surprisingly close to our estimate for #rstat faces. The organisation for useR 2017 will probably improve on this considering the facilities they're providing and the location (who doesn't want to go to Brussels!).
 
