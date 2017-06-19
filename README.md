@@ -2,9 +2,11 @@
 Adnan Fiaz  
 
 
-The representation of women in technology is gaining more and more focus. In the R community this has lead to the foundation of R Ladies, the awarding of a grant by the R Foundation to them and the offering of a scholarship by the useR conference (the latter two are also about inclusion of other minorities). This is a good thing but it does make me wonder: how do we measure success? how will we know these actions have lead to a better situation? And by how much?
+The representation of women in technology is gaining more and more attention. In the R community, R-Ladies has grown massively over the past year and been awarded funding by the R-Consortium. The useR! conference has offered diversity scholarships (for underrepesented minorities in general) for the conferences in 2016 and 2017. This is a good thing but it does make me wonder: how do we measure success? how will we know these actions have lead to a better situation? And by how much?
 
-This blogpost by Maelle Salmon and this one by Colin Fay inspired me to explore this issue as follows: if we could somehow measure the representation of women currently in our community we can keep track of this. As Mango are organisers of the EARL conference it would also help us assess our own performance.
+[This](http://www.masalmon.eu/2017/03/19/facesofr/) blogpost by Maelle Salmon and [this](http://colinfay.me/playing-with-rstats-and-microsoft-computer-vision-api/) one by Colin Fay inspired me to explore this issue as follows: if we could somehow measure the representation of women currently in our community we can keep track of this. As Mango are organisers of the EARL conference it would also help us assess our own performance.  
+
+Before I jump to the code I should mention that this is a simplified approach to the problem. The issue of equal representation is much more complex and the subject of a separate branch of research. This blogpost is an attempt to approach the problem of data collection and measuring progress from a different angle. 
 
 So I set out to measure the proportion of women among the faces of #rstats. I used Colin's code to first retrieve the profile pictures. 
 
@@ -53,17 +55,20 @@ usersWithGender <- users %>%
 ```
 
 
-From Maelle's great collage we already knew not all profile pictures are of people and the Face API does not return any predictions in these cases. There are also some instances the Face API wrongfully didnt detect a face (not even one of our EARL keynote speaker, sorry Hillary Parker). Altogether the Face API detected  314 faces and the proportion of women among the #rstat faces is 20.4% (click [here](https://s-media-cache-ak0.pinimg.com/736x/57/6d/fe/576dfe57df89ef97cd31fd7601651bc2.jpg) for the pie chart). This is only an estimate and it might not even be a very accurate one but we can compare it with other estimates:
+From Maelle's great collage I already knew not all profile pictures are of people and the Face API does not return any predictions in these cases. There are also some instances the Face API wrongfully didnt detect a face (sorry Hillary Parker). Altogether the Face API detected  314 faces and the proportion of women among the #rstat faces is 20.4%. 
+
+This value is our first estimate and to assess its accuracy I want to compare it with other estimates. I have tried my best to find other sources but that has proven harder than I thought. Below I have plotted my estimate with estimates based on Dutch labour statistics^[CBS.nl / Arbeidsvolume naar bedrijfstak en geslacht / 62-63 IT- en informatiedienstverlening], Google diversity statistics^[Google Diversity 2015 (http://www.google.com/diversity/)] and the StackOverflow Developer Survey^[Developer Survey Results 2017 (https://insights.stackoverflow.com/survey/2017#demographics)]. 
 
 ![](rstats_faces_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
-Although the percentage of women in technology at Google and in the Netherlands are based on an entirely different populations our estimate is close to these two. It is fair to assume, without any further knowledge, that the percentage of women in the #rstats community will be similar to the percentage of women in the wider tech community. Nevertheless there are other issues with the general estimates. The industry categorisation of the Netherlands means that we're not capturing all tech jobs (for example, those in finance aren't included). Also there has been quite the controversy on Google's gender gap which may mean that estimate is too low as well. And finally in the discussion on the results of the StackOverflow Developer Survey it is stated their estimate is probably too low. 
+Although the percentage of women in technology at Google and in the Netherlands are based on an entirely different populations our estimate is close to these two. I have no specific knowledge about the #rstats community that would make it different from the wider tech community so I would expect the estimates to be close to each other. However there are some issues with the general estimates. The industry categorisation of the Netherlands means that we're not capturing all tech jobs (for example, those in finance aren't included). Also there has been quite the controversy on Google's gender gap which may mean that estimate is too low as well. And finally in the discussion on the results of the StackOverflow Developer Survey it is stated their estimate is probably too low. 
 
-If we knew about these issues then why did we use them in the first place? Because it's the best we could find and that may be a problem. Without an accurate measure and without knowing how accurate our own measure is, it is clearly impossible to use it as an KPI ^[We don't give up that easily. Another approach to validating our estimate is to count the members of all R-Ladies groups. After correcting for duplicates this might give us a more accurate estimate but it is beyond the scope of this blogpost.]. So was this whole exercise just an excuse for us to play with the Microsoft Face API? Perhaps. Have we wasted your time by making you read it? Perhaps not. In the next section we explore a different use for our approach.
+If I knew about these issues then why did I use them in the first place? Because it's the best I could find and that is a problem. Without an accurate measure and without knowing how accurate my own measure is, it is clearly impossible to use it as an KPI ^[I don't give up that easily. Another approach to validating my estimate is to count the members of all R-Ladies groups. After correcting for duplicates this might give me
+a more accurate estimate but it is beyond the scope of this blogpost.]. I will come back to this point later on but first I want to show how this methodology to measure the proportion of women can still be useful.
 
 ### Let's go to the conference!
 
-Our approach so far has been to use profile pictures, determine the gender and then calculate the percentage of women. By applying this approach to conferences we can semi-automatically determine the percentage of women for these conferences and then compare them with each other and year over year. The conferences we will be looking at are EARL and useR. 
+Our approach so far has been to use profile pictures, estimate the gender and then calculate the percentage of women. By applying this approach to conferences we can semi-automatically estimate the percentage of women for these conferences and then compare them with each other and year over year. The conferences we will be looking at are EARL and useR!. 
 
 First, we have to do some webscraping to retrieve the profile pictures. This is relatively easy with the **rvest** package. Below is the code for EARL London 2016.
 
@@ -97,7 +102,7 @@ earlSF2017Genders <- earlSF2017 %>%
   map_chr(~getGender(.))
 ```
 
-I wasn't able to find profile pictures of the speakers for useR 2017 but for useR 2016 I was able to use almost the same code as above.  
+I wasn't able to find profile pictures of the speakers for useR! 2017 but for useR! 2016 I was able to use almost the same code as above.  
 
 
 ```r
@@ -113,8 +118,11 @@ Finally, armed with the web scraping results we can plot the gender distribution
 
 ![](rstats_faces_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
-Compared to 2016  the percentage of women speakers at EARL has gone up. This reflects the effort that has been put in by the EARL team and will hopefully continue to improve in the future. The estimate for useR 2016 is surprisingly close to our estimate for #rstat faces. The organisation for useR 2017 will probably improve on this considering the facilities they're providing and the location (who doesn't want to go to Brussels!).
+Compared to 2016  the percentage of women speakers at EARL has gone up. This reflects the effort that has been put in by the EARL team and will hopefully continue to improve in the future. The estimate for useR! 2016 is surprisingly close to our estimate for #rstat faces. The organisation for useR! 2017 will probably improve on this considering they're providing childcare, diversity scholarships and the location (who doesn't want to go to Brussels!).
 
 ### Summary
+I'm just scraping the surface of gender prediction with this blogpost (see for example the [genderizeR](https://github.com/kalimu/genderizeR) package for another approach). Also there are a number of caveats to my analysis that I didn't cover such as the accuracy of the Face API, the bias in twitter users or the bias in conference attendees. This blogpost wasn't intended to be at the level of an academic paper but rather a short exploration into a different approach to the problem.
 
+As such my conclusion is that my method is definitely not complete. Without ground truth values it's hard to say how accurate my #rstat faces estimate is. The values that I did collect weren't consistent but that doesn't mean there aren't any better statistics out there (if you're familiar with any please let us know!). Furthermore, as a standalone KPI this estimate won't suffice but it could be useful in other contexts together with other values. The conference estimates are an example of this.
 
+There are many more things that I wanted explore but unfortunately there was no time. If you're interested, the code for this post can be found on [GitHub](https://github.com/MangoTheCat) and you can always reach us via [twitter](https://twitter.com/MangotheCat]).  
