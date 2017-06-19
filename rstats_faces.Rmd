@@ -59,11 +59,6 @@ usersWithGender <- users %>%
   mutate(gender= getGender(profile_image_url)) %>% 
   select(user_id, gender)
 ```
-```{r, include=FALSE}
-library(readr)
-usersWithGender <- read_csv("data/usersWG.csv") 
-```
-
 From Maelle's great collage I already knew not all profile pictures are of people and the Face API does not return any predictions in these cases. There are also some instances the Face API wrongfully didnt detect a face (sorry Hillary Parker). Altogether the Face API detected  `r sum(!is.na(usersWithGender$gender))` faces and the proportion of women among the #rstat faces is `r sprintf("%.01f%%" ,sum(usersWithGender$gender=="female", na.rm=TRUE)/sum(!is.na(usersWithGender$gender))*100)`. 
 
 This value is our first estimate and to assess its accuracy I want to compare it with other estimates. I have tried my best to find other sources but that has proven harder than I thought. Below I have plotted my estimate with estimates based on Dutch labour statistics^[CBS.nl / Arbeidsvolume naar bedrijfstak en geslacht / 62-63 IT- en informatiedienstverlening], Google diversity statistics^[Google Diversity 2015 (http://www.google.com/diversity/)] and the StackOverflow Developer Survey^[Developer Survey Results 2017 (https://insights.stackoverflow.com/survey/2017#demographics)]. 
@@ -146,17 +141,16 @@ conferences <- c("#rstats faces", "EARL London 2015", "EARL London 2016", "UseR 
                                 "EARL SF 2017", "EARL London 2017")
 conferences <- factor(conferences, levels=conferences)
 
-earlLondon2015 <- 7/39 # 
-# earlLondon2016 <- table(earl2016Genders)[1]/sum(!is.na(earl2016Genders))
-# earlLondon2017 <- table(earlLondon2017Genders)[1]/sum(!is.na(earlLondon2017Genders))
-# earlSF2017 <- table(earlSF2017Genders)[1]/sum(!is.na(earlSF2017Genders))
-# user2016 <- table(user2016Genders)[1]/sum(!is.na(user2016Genders))
+earlLondon2015 <- 7/39 # hard coded here as there were no pictures
+earlLondon2016 <- table(earl2016Genders)[1]/sum(!is.na(earl2016Genders))
+earlLondon2017 <- table(earlLondon2017Genders)[1]/sum(!is.na(earlLondon2017Genders))
+earlSF2017 <- table(earlSF2017Genders)[1]/sum(!is.na(earlSF2017Genders))
+user2016 <- table(user2016Genders)[1]/sum(!is.na(user2016Genders))
 plotData <- data.frame(Type = conferences, 
-                       PercentageWomen= c(rstat_faces, earlLondon2015, 0.1, 0.19, 0.25, 0.24)) 
+                       PercentageWomen= c(rstat_faces, earlLondon2015, earlLondon2016, 
+                                          user2016, earlSF2017, earlLondon2017)) 
 
 library(ggplot2)
-#ggplot(myData , aes(x=Type, y=PercentageWomen)) + geom_bar(stat="identity") + ylim(c(0,1))
-
 ggplot(plotData, aes(x=Type, y=PercentageWomen)) +
   geom_segment(aes(x = Type, xend = Type,
                      y = 0, yend = PercentageWomen), 
