@@ -125,4 +125,4 @@ I'm just scraping the surface of gender prediction with this blogpost (see for e
 
 As such my conclusion is that my method is definitely not complete. Without ground truth values it's hard to say how accurate my #rstat faces estimate is. The values that I did collect weren't consistent but that doesn't mean there aren't any better statistics out there (if you're familiar with any please let us know!). Furthermore, as a standalone KPI this estimate won't suffice but it could be useful in other contexts together with other values. The conference estimates are an example of this.
 
-There are many more things that I wanted explore but unfortunately there was no time. If you're interested, the code for this post can be found on [GitHub](https://github.com/MangoTheCat) and you can always reach us via [twitter](https://twitter.com/MangotheCat]).  
+There are many more things that I wanted explore but unfortunately there was no time. If you're interested, the code for this post can be found on [GitHub](https://github.com/MangoTheCat/blog_rstats_gender) and you can always reach us via [twitter](https://twitter.com/MangotheCat]).  
