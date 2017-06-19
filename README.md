@@ -55,7 +55,7 @@ usersWithGender <- users %>%
 ```
 
 
-From Maelle's great collage I already knew not all profile pictures are of people and the Face API does not return any predictions in these cases. There are also some instances the Face API wrongfully didnt detect a face (sorry Hillary Parker). Altogether the Face API detected  314 faces and the proportion of women among the #rstat faces is 20.4%. 
+From Maelle's great collage I already knew not all profile pictures are of people and the Face API does not return any predictions in these cases. There are also some instances the Face API wrongfully didn't detect a face (sorry Hillary Parker). Altogether the Face API detected  314 faces and the proportion of women among the #rstat faces is 20.4%. 
 
 This value is our first estimate and to assess its accuracy I want to compare it with other estimates. I have tried my best to find other sources but that has proven harder than I thought. Below I have plotted my estimate with estimates based on Dutch labour statistics^[CBS.nl / Arbeidsvolume naar bedrijfstak en geslacht / 62-63 IT- en informatiedienstverlening], Google diversity statistics^[Google Diversity 2015 (http://www.google.com/diversity/)] and the StackOverflow Developer Survey^[Developer Survey Results 2017 (https://insights.stackoverflow.com/survey/2017#demographics)]. 
 
