@@ -2,6 +2,8 @@
 Adnan Fiaz  
 
 
+_**Update 29/06/2017:** The approach outlined in this blogpost was taken under the assumption that gender is binary but that is incorrect. Do read on as it might inspire you to do better and if you do wish to contribute to the topic check out [Forwards](http://forwards.github.io/)._
+
 The representation of women in technology is gaining more and more attention. In the R community, R-Ladies has grown massively over the past year and been awarded funding by the R-Consortium. The useR! conference has offered diversity scholarships (for underrepesented minorities in general) for the conferences in 2016 and 2017. This is a good thing but it does make me wonder: how do we measure success? how will we know these actions have lead to a better situation? And by how much?
 
 [This](http://www.masalmon.eu/2017/03/19/facesofr/) blogpost by Maelle Salmon and [this](http://colinfay.me/playing-with-rstats-and-microsoft-computer-vision-api/) one by Colin Fay inspired me to explore this issue as follows: if we could somehow measure the representation of women currently in our community we can keep track of this. As Mango are organisers of the EARL conference it would also help us assess our own performance.  
@@ -53,7 +55,6 @@ usersWithGender <- users %>%
   mutate(gender= getGender(profile_image_url)) %>% 
   select(user_id, gender)
 ```
-
 
 From Maelle's great collage I already knew not all profile pictures are of people and the Face API does not return any predictions in these cases. There are also some instances the Face API wrongfully didn't detect a face (sorry Hillary Parker). Altogether the Face API detected  314 faces and the proportion of women among the #rstat faces is 20.4%. 
 
@@ -116,7 +117,7 @@ user2016Genders <- read_html(user2016URL) %>%
 
 Finally, armed with the web scraping results we can plot the gender distribution for different conferences.
 
-![](rstats_faces_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](rstats_faces_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 Compared to 2016  the percentage of women speakers at EARL has gone up. This reflects the effort that has been put in by the EARL team and will hopefully continue to improve in the future. The estimate for useR! 2016 is surprisingly close to our estimate for #rstat faces. The organisation for useR! 2017 will probably improve on this considering they're providing childcare, diversity scholarships and the location (who doesn't want to go to Brussels!).
 
@@ -125,4 +126,4 @@ I'm just scraping the surface of gender prediction with this blogpost (see for e
 
 As such my conclusion is that my method is definitely not complete. Without ground truth values it's hard to say how accurate my #rstat faces estimate is. The values that I did collect weren't consistent but that doesn't mean there aren't any better statistics out there (if you're familiar with any please let us know!). Furthermore, as a standalone KPI this estimate won't suffice but it could be useful in other contexts together with other values. The conference estimates are an example of this.
 
-There are many more things that I wanted explore but unfortunately there was no time. If you're interested, the code for this post can be found on [GitHub](https://github.com/MangoTheCat/blog_rstats_gender) and you can always reach us via [twitter](https://twitter.com/MangotheCat]).  
+There are many more things that I wanted explore but unfortunately there was no time. If you're interested, the code for this post can be found on [GitHub](https://github.com/MangoTheCat/blog_rstats_gender) and you can always reach us via [twitter](https://twitter.com/MangotheCat]). 
